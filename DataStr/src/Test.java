@@ -13,7 +13,10 @@ public class Test {
 		list.add(42);
 		list.add(12);
 		list.print();
-		System.out.println(list.getAtPos(1));
+		for(int x: list){
+			System.out.println(x);
+		}
+		/*
 		list.remove(2);
 		list.print();
 		list.remove(0);
@@ -24,7 +27,7 @@ public class Test {
 		stack.append("ciao");
 		System.out.println(stack.pop());
 		System.out.println(stack.pop());
-		stack.peek();
+		stack.peek();*/
 	}
 
 }

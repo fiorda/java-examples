@@ -1,5 +1,6 @@
 
 import java.lang.IndexOutOfBoundsException;
+import java.util.Iterator;
 
 public class DataStr {
 
@@ -34,27 +35,21 @@ public class DataStr {
 		}
 	}
 	
-	public static class LinkedList<T>{
-		private Node<T> head = null;
-		private int length = 0;
+	private static class LinkedListBase<T> implements Iterable<T>{
+		protected Node<T> head = null;
+		protected int length = 0;
 		
 		public int length(){
 			return this.length;
 		}
 		
 		public void add(T data){
-			/*
-			 * Add at beginning
-			 */
+			//Add at beginning
 			Node<T> newNode = new Node<T>(data, head);
 			this.head = newNode;
 			this.length++;
 		}
-		
-		public void add(T data, int pos){
-			// Add at position pos
-		}
-		
+
 		public T remove(){
 			// Remove at beginning
 			if(this.length()==0){
@@ -64,6 +59,68 @@ public class DataStr {
 			this.head = head.getNext();
 			this.length --;
 			return data;
+		}
+		
+		protected Node<T> getNodeAtPos(int pos){
+			// Get node at position pos
+			if(pos>=length||pos<0){
+				throw new IndexOutOfBoundsException("");
+			}
+			Node<T> current = head;
+			for(int i = 0; i < pos; i++){
+				current = current.getNext();
+			}
+			return current;
+		}
+		
+		public T getAtPos(int pos){
+			// return data at position pos
+			return getNodeAtPos(pos).getData();
+		}
+
+		@Override
+		public Iterator<T> iterator() {
+			// 
+			return new ListIterator<T>(head);
+		}
+		
+		private static final class ListIterator<T> implements Iterator<T>{
+
+			private Node<T> current;
+			
+			ListIterator(Node<T> current){
+				this.current = current;
+			}
+			
+			public boolean hasNext() {
+				return current!=null;
+			}
+
+			@Override
+			public T next() {
+				T data = current.getData();
+				current = current.getNext();
+				return data;
+			}
+
+			@Override
+			public void remove() {
+				// No remove method --
+				System.err.println("Remove not implemented");
+			}
+			
+		}
+		
+	}
+	
+	private static class LinkedListEnd<T> extends LinkedListBase<T>{
+		Node<T> tail = head;
+	}
+	
+	public static class LinkedList<T> extends LinkedListBase<T>{
+		
+		public void add(T data, int pos){
+			// Add at position pos
 		}
 		
 		public T remove(int pos){
@@ -81,23 +138,6 @@ public class DataStr {
 			this.length --;
 			return data;
 		}
-
-		private Node<T> getNodeAtPos(int pos){
-			// Get node at position pos
-			if(pos>=length||pos<0){
-				throw new IndexOutOfBoundsException("");
-			}
-			Node<T> current = head;
-			for(int i = 0; i < pos; i++){
-				current = current.getNext();
-			}
-			return current;
-		}
-
-		public T getAtPos(int pos){
-			// return data at position pos
-			return getNodeAtPos(pos).getData();
-		}
 		
 		public void print(){
 			// Print elements of list
@@ -113,7 +153,8 @@ public class DataStr {
 	}
 	
 	public static class Stack<T>{
-		private final LinkedList<T> list = new LinkedList<T>();
+		//Implement a stack based on Linked List
+		private final LinkedListBase<T> list = new LinkedList<T>();
 		
 		public void append(T data){
 			list.add(data);
@@ -125,8 +166,7 @@ public class DataStr {
 			}
 			catch(IndexOutOfBoundsException err){
 				throw new IndexOutOfBoundsException("The stack is empy");
-			}
-			
+			}	
 		}
 		
 		public T peek(){
@@ -141,6 +181,8 @@ public class DataStr {
 	}
 	
 	public static class Queue<T>{
+		
+		private LinkedListEnd<T> list;
 		
 	}
 	
