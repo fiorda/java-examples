@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Dimension;
+import java.awt.RenderingHints;
 
 public class GWindow extends JPanel implements KeyListener, ActionListener{
 	
@@ -24,6 +25,7 @@ public class GWindow extends JPanel implements KeyListener, ActionListener{
 		player = new Player(WINDOW_WIDTH/2, WINDOW_HEIGHT/2);
 		setFocusable(true);
 		addKeyListener(this);
+		setDoubleBuffered(true);
 		setBackground(Color.WHITE);
 		time.start();
 	}
@@ -31,6 +33,7 @@ public class GWindow extends JPanel implements KeyListener, ActionListener{
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
 		Graphics2D g2 = (Graphics2D) g;
+		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		drawWindow(g2);
 	}
 	
